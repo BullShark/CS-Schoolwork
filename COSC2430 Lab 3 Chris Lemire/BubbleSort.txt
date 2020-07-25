@@ -1,0 +1,27 @@
+/*
+
+BubbleSort
+
+pass 0 * 7 10  3  9  2
+***********************
+pass 1 * 7  3  9  2 10
+***********************
+pass 2 * 3  7  2  9 10
+***********************
+pass 3 * 3  2  7  9 10
+***********************
+pass 4 * 2  3  7  9 10
+
+*/
+
+
+public void BubbleSort (int[] a) {
+   int temp;
+      for (int pass = 1; pass < a.length; pass++)
+         for (int I = 0; I < a.length -1; i++)
+            if (a[i] > a[i + 1]) {
+               temp = a[i];
+               a[i] = a[i + 1];
+               a[I + 1] = temp;
+            }
+}

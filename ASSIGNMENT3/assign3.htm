@@ -1,0 +1,194 @@
+<html>
+<head>
+<meta name="keywords" content="COSC2415">
+<meta name="Author" content="Yu-Pa Ng">
+<title>Programming assignment 3</title>
+
+<meta http-equiv="Content-Type" content="text/html;charset=windows-1252">
+</head>
+
+<font color="#3232CD"><h2><center>COSC2415 Data Structures</h2>
+<h3>Programming Assingment 3: Doubly Linked Lists</h3>
+<h4>Due Date: 4/26/06 1:10pm</center></font></h4>
+<h4>The assignment:</h4>
+In this assignment you will learn about dynamic data structures and
+implement a useful data type known as a <code>BigInt</code>.
+A <code>BigInt</code> is an integer type that can hold an arbitrary number
+of digits.  
+
+<p>The size and precision of all numeric data types is limited by the
+number of bytes used to represent these data types.  It is sometimes
+useful to manipulate numeric values with a much greater precision and
+larger number of digits.  You will implement a data type called a 
+<code>BigInt</code> which will allow you to store and manipulate 
+<i>non-negative</i> integers with arbitrary precision using linked
+lists.  Each node of the list will contain a <i>single digit</i>
+0 .. 9.  For example, the integer value 123456789 would be represented as
+follows:
+
+<pre>
+ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+ | ->| ->| ->| ->| ->| ->| ->| ->| --|---
+                                        <u>|</u>
+</pre>
+
+A zero would be represented by any number of 0's linked together.  Most
+arithmetic operations performed on <code>BigInt</code>'s require a
+right to left traversal of this list.  (Think about how addition is 
+performed on two integers).  Thus, we will make the <code>BigInt</code>
+a doubly linked list for convenience.
+
+<pre>
+   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+   | ->| ->| ->| ->| ->| ->| ->| ->| --|---
+---| --| <-| <-| <-| <-| <-| <-| <-| <-|  <u>|</u>
+<u>|</u>
+     <b>^</b>                               <b>^</b>
+     |                               | 
+    first                           last
+</pre>
+
+The <code>BigInt</code> also maintains two extra references, <code>first</code>
+which is a reference to the head of the list, and <code>last</code>
+which is a reference to the end of the list. 
+
+<h4>Task 1: </h4>
+Implement <code>Node</code> class and <code>BigInt</code> class according
+to the following description:
+
+<p>Here is the <code>Node</code> class should look like:
+
+<pre>
+public class Node
+{
+   public int digit;
+   public Node next, pre;
+
+   // Constructors code ...
+}
+</pre>
+
+Here is the <code>BigInt</code> class should look like:
+<pre>
+public class BigInt
+{
+   private Node first, last;
+
+   //Constructors and methods ...
+}
+</pre>
+Provide the following operations:
+<ol>
+
+<li><b><code>public BigInt(int [] array)</code></b> -- Constructor.  Dynamically create
+    a new <code>BigInt</code> object with the digit values contained in the array
+    <code>array</code>.  Return the <i>newly allocated</i> <code>BigInt</code>.
+<li><b><code>public BigInt add(BigInt B)</code></b> -- Add 
+    <code>B</code> to the calling <code>BigInt</code> object and return the <i>newly
+    allocated</i> <code>BigInt</code>.  <b>Hint:</b> pad the smaller number
+    with extra zero's at the front (use <code>addDigitFirst()</code>). 
+<li><b><code>public BigInt scale(int s)</code></b> -- Multiply 
+    the calling <code>BigInt</code> object by the single digit <code>s</code> 
+    and return the <i>newly allocated</i> <code>BigInt</code>.
+<li><b><code>public BigInt multiply(BigInt B)</code></b> -- Multiply 
+    the calling <code>BigInt</code> object by <code>B</code> and return the <i>newly
+    allocated</i> <code>BigInt</code>.
+<li><b><code>public int numDigits()</code></b> -- Return the number of 
+    digits in the calling <code>BigInt</code> object.
+<li><b><code>public void toString()</code></b> -- Print the calling <code>BigInt</code> object
+    from left to right.  Do not print any leading zeros, e.g. 00035 should be 35.
+    If the number is 0's, only print one zero.
+<p>You may find the following methods are helpful methods:
+<li><b><code>public void addDigitFirst(int digit)</code></b> -- Add 
+    a new digit to the front of the calling <code>BigInt</code> object.
+<li><b><code>public void addDigitLast(int digit)</code></b> -- Add 
+    a new digit to the end of the calling <code>BigInt</code> object.
+</ol>
+
+<h4>Task 2:</h4>
+Write a program <code>TestBigInt.java</code> that contain the following code
+to test the <code>BigInt</code> class:
+<pre>
+/*
+ *******************************************
+ * TestBigInt.java                         *
+ * Test the BigInt class.                  *
+ *******************************************
+ */
+
+public class TestBigInt
+{
+   public static void main(String [] args)
+   {
+      int a1[] = {1,2,3};
+      int a2[] = {4,6,8,0,7};
+
+      BigInt B1, B2, B3, B4, B5;
+      B1 = new BigInt(a1);
+      B2 = new BigInt(a2);
+
+      System.out.println("B1 = " + B1);
+      System.out.println("B2 = " + B2);
+      System.out.println("B1 has " + B1.numDigits() + " digits.");
+      System.out.println("B2 has " + B2.numDigits() + " digits.");
+ 
+      System.out.print(B1 + " * " + "4 = ");
+      B1 = B1.scale(4);
+      System.out.println(B1);
+    
+      System.out.print(B1 + " + " + B2 + " = "); 
+      B3 = B1.add(B2);
+      System.out.println(B3);
+
+      System.out.print(B1 + " * " + B2 + " = "); 
+      B4 = B1.multiply(B2);
+      System.out.println(B4);
+  
+      B5 = B4.scale(0);
+      System.out.println(B5);
+
+   }
+}
+</pre>
+<hr>
+
+<h4>Extra Credit: (25 points)</h4>
+Implement the following method:  
+<p><b><code>public BigInt divide(BigInt B)</code></b> -- Divide
+    the calling <code>BigInt</code> object by <code>B</code> and return the <i>newly
+    allocated</i> <code>BigInt</code>.  (Think about how integer division
+    works.)  You will need to take care of the case that is divided by 0.
+
+<p>AND, add code to the <code>TestBigInt.java</code> file to apply the divide method
+and print appropriate message.  Test the normal division, as well as dividing by 0.
+<hr>
+<h4>Hand-In:</h4>
+Your program should starts with the "This program is written by ..." phrase as usual.  
+Make sure you comment your program thoroughly.  You will be graded on the 
+correctness of your program first and foremost, but also on the style of the
+java program.  Style includes things like proper indenting of statements, good
+variable and method names, and commens where appropriate.
+
+<ol>
+  <li>One page report about your program.  Describe what should I look for,
+      what's working and what's not working in your program.
+  <li>Output of your source code listings.
+  <li>Running output of your program.
+</ol>
+ 
+<hr>
+<font size="-1">
+<a href="http://www.accd.edu/sac/math/faculty/yng/classes/sp2006/cosc2415/COSC2415_index.htm">Back to COSC2415 Home Page</a>
+<br><SCRIPT language="javascript">
+    
+<!--
+        var lastUpdate = new Date(document.lastModified);
+	
+document.write("Last Revised: " + lastUpdate.toString());
+      
+-->
+  </SCRIPT>
+</font>
+</body>
+</html>
+<!-- This document saved from http://www.accd.edu/sac/math/faculty/yng/classes/sp2006/cosc2415/homework/assign3.htm -->
